@@ -35,51 +35,51 @@ class ControllerBuilder:
         self.response_schema: type[SQLModel] = response_schema
         self.create_schema: type[SQLModel] | None = None
         self.update_schema: type[SQLModel] | None = None
-        self.methods: list[str] = []
+        self.methods: set[str] = set()
 
     def enable_get(self):
         """Enables the GET /{path}/ endpoint to fetch all items."""
-        self.methods.append("GET")
+        if "GET" in self.methods:
+            raise ValueError("GET endpoint is already enabled.")
+        self.methods.add("GET")
         return self
 
     def enable_get_by_id(self):
         """Enables the GET /{path}/{id} endpoint to fetch an item by ID."""
-        self.methods.append("GETID")
+        if "GETID" in self.methods:
+            raise ValueError("GET by ID endpoint is already enabled.")
+        self.methods.add("GETID")
         return self
 
     def enable_create(self, schema: type[SQLModel]):
-        """Enables the POST /{path}/ endpoint to create a new item.
-
-        Args:
-            schema: The input schema used to create new items (CreateSchemaType).
-        """
+        """Enables the POST /{path}/ endpoint to create a new item."""
+        if "POST" in self.methods:
+            raise ValueError("POST endpoint is already enabled.")
         self.create_schema = schema
-        self.methods.append("POST")
+        self.methods.add("POST")
         return self
 
     def enable_update(self, schema: type[SQLModel]):
-        """Enables the PATCH /{path}/{id} endpoint to partially update an item.
-
-        Args:
-            schema: The input schema for partial updates (UpdateSchemaType).
-        """
+        """Enables the PATCH /{path}/{id} endpoint to partially update an item."""
+        if "PATCH" in self.methods:
+            raise ValueError("PATCH endpoint is already enabled.")
         self.update_schema = schema
-        self.methods.append("PATCH")
+        self.methods.add("PATCH")
         return self
 
     def enable_put(self, schema: type[SQLModel]):
-        """Enables the PUT /{path}/{id} endpoint to fully replace an item.
-
-        Args:
-            schema: The input schema used for complete replacement (same as PATCH).
-        """
+        """Enables the PUT /{path}/{id} endpoint to fully replace an item."""
+        if "PUT" in self.methods:
+            raise ValueError("PUT endpoint is already enabled.")
         self.update_schema = schema
-        self.methods.append("PUT")
+        self.methods.add("PUT")
         return self
 
     def enable_delete(self):
         """Enables the DELETE /{path}/{id} endpoint to delete an item."""
-        self.methods.append("DELETE")
+        if "DELETE" in self.methods:
+            raise ValueError("DELETE endpoint is already enabled.")
+        self.methods.add("DELETE")
         return self
 
     def enable_read_only(self):
