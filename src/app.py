@@ -10,7 +10,7 @@ from src.entities.user.routes import user_controller, user_role_controller
 from src.entities.state.routes import state_controller
 from src.entities.device.routes import device_controller
 from src.entities.device.routes import device_relation_controller
-# from .services.security import DecryptionMiddleware, EncryptionMiddleware
+from .services.security import DecryptionMiddleware, EncryptionMiddleware
 
 
 @asynccontextmanager
@@ -39,8 +39,8 @@ app.add_middleware(
 )
 
 # Agregar middlewares en el orden correcto
-# app.add_middleware(DecryptionMiddleware, key=key)
-# app.add_middleware(EncryptionMiddleware, key=key)
+app.add_middleware(DecryptionMiddleware, key=key)
+app.add_middleware(EncryptionMiddleware, key=key)
 
 
 # Manejo de excepciones
